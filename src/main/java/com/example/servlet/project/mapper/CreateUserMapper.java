@@ -10,6 +10,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public class CreateUserMapper implements Mapper<CreateUserDto, User> {
+    private static final String IMAGE_FOLDER = "users/";
     private static final CreateUserMapper INSTANCE = new CreateUserMapper();
 
     @Override
@@ -22,6 +23,7 @@ public class CreateUserMapper implements Mapper<CreateUserDto, User> {
                 .birthday(LocalDateFormatter.format(object.getBirthday()))
                 .password(object.getPassword())
                 .gender(Gender.valueOf(object.getGender()))
+                .image(IMAGE_FOLDER + object.getImage().getSubmittedFileName())
                 .build();
     }
 

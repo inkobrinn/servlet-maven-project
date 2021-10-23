@@ -18,8 +18,8 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class UserDao implements Dao<Long, User> {
     private static final UserDao INSTANCE = new UserDao();
-    private static final String SAVE_SQL = "INSERT INTO users(name, surname, phone, email, birthday, password, gender)" +
-            "VALUES (?,?,?,?,?,?,?)";
+    private static final String SAVE_SQL = "INSERT INTO users(name, surname, phone, email, birthday, password, gender, image)" +
+            "VALUES (?,?,?,?,?,?,?,?)";
 
 
     @Override
@@ -54,6 +54,7 @@ public class UserDao implements Dao<Long, User> {
             preparedStatement.setDate(5, Date.valueOf(entity.getBirthday()));
             preparedStatement.setObject(6, entity.getPassword());
             preparedStatement.setObject(7, entity.getGender().name());
+            preparedStatement.setObject(8, entity.getImage());
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             generatedKeys.next();

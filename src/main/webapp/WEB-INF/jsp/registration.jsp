@@ -5,13 +5,13 @@
     <title>Registration</title>
 </head>
 <body>
-<form action="/registration" method="post">
+<form action="/registration" method="post" enctype="multipart/form-data">
     <label for="userName">Name:
-        <input type="text" name="name" id="userName">
+        <input type="text" name="name" id="userName" required>
     </label>
     <br>
     <label for="surname">Surname:
-        <input type="text" name="surname" id="surname">
+        <input type="text" name="surname" id="surname" required>
     </label>
     <br>
     <label for="phone">Phone:
@@ -19,7 +19,7 @@
     </label>
     <br>
     <label for="email">Email:
-        <input type="text" name="email" id="email">
+        <input type="text" name="email" id="email" required>
     </label>
     <br>
     <label for="birthday">Birthday:
@@ -27,13 +27,17 @@
     </label>
     <br>
     <label for="password">Password:
-        <input type="password" name="password" id="password">
+        <input type="password" name="password" id="password" required>
     </label>
     <br>
     <label>
         <c:forEach var="gender" items="${requestScope.gender}">
             <input type="radio" name="gender" value="${gender}">${gender}
         </c:forEach>
+    </label>
+    <br>
+    <label for="image">Image:
+        <input type="file" name="image" id="image">
     </label>
     <br>
     <button type="submit">Send</button>
