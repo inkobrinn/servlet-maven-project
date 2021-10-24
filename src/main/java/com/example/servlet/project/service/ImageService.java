@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Optional;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -23,6 +24,12 @@ public class ImageService {
             Files.createDirectories(fullPath.getParent());
             Files.write(fullPath, imageContent.readAllBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         }
+    }
+
+    @SneakyThrows
+    public Optional<InputStream> get(String imagePath) {
+        Path fullPath = Path.of(basePath, imagePath);
+        return Files.exists(fullPath) ? Optional.of(Files.newInputStream(fullPath)) : Optional.empty();
     }
 
     public static ImageService getInstance() {

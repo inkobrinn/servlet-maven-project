@@ -5,6 +5,7 @@
     <title>Registration</title>
 </head>
 <body>
+<img src="/image/users/wp2587551.jpg" alt="User image">
 <form action="/registration" method="post" enctype="multipart/form-data">
     <label for="userName">Name:
         <input type="text" name="name" id="userName" required>
@@ -41,13 +42,13 @@
     </label>
     <br>
     <button type="submit">Send</button>
-        <c:if test="${not empty requestScope.errors}">
-            <div style="color: red">
-                <c:forEach var="error" items="${requestScope.errors}">
-                    <span>${error.message}</span><br>
-                </c:forEach>
-            </div>
-        </c:if>
+    <c:if test="${not empty requestScope.errors}">
+        <div style="color: red">
+            <c:forEach var="error" items="${requestScope.errors}">
+                <span>${error.message}</span><br>
+            </c:forEach>
+        </div>
+    </c:if>
 </form>
 </body>
 </html>
