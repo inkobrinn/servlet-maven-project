@@ -1,5 +1,7 @@
 package com.example.servlet.project.dao;
 
+import com.example.servlet.project.entity.Gender;
+import com.example.servlet.project.entity.Role;
 import com.example.servlet.project.entity.User;
 import com.example.servlet.project.util.ConnectionManager;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +23,8 @@ public class UserDao implements Dao<Long, User> {
     private static final UserDao INSTANCE = new UserDao();
     private static final String SAVE_SQL = "INSERT INTO users(name, surname, phone, email, birthday, password, gender, image)" +
             "VALUES (?,?,?,?,?,?,?,?)";
+    private static final String FIND_BY_EMAIL_AND_PASSWORD = "SELECT id, name, surname, phone, email, birthday, password, role, gender, image" +
+            " FROM users WHERE email = ? AND password = ?";
 
 
     @Override
@@ -27,7 +32,37 @@ public class UserDao implements Dao<Long, User> {
         return null;
     }
 
-    @Override
+    @SneakyThrows
+    public Optional<User> findByEmailAndPassword(String email, String password) {
+        try (Connection connection = ConnectionManager.open()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_EMAIL_AND_PASSWORD);
+            preparedStatement.setString(1, email);
+            preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            User user = null;
+            if (resultSet.next()) {
+                user = buildUser(resultSet);
+            }
+            return Optional.ofNullable(user);
+        }
+    }
+
+    private User buildUser(ResultSet resultSet) throws SQLException {
+        return User.builder()
+                .id(resultSet.getLong("id"))
+                .name(resultSet.getString("name"))
+                .surname(resultSet.getString("surname"))
+                .phone(resultSet.getString("phone"))
+                .email(resultSet.getString("email"))
+                .birthday(resultSet.getDate("birthday").toLocalDate())
+                .password(resultSet.getString("password"))
+                .role(Role.valueOf(resultSet.getString("role")))
+                .gender(Gender.valueOf(resultSet.getString("gender")))
+                .image(resultSet.getString("image"))
+                .build();
+
+    }
+
     public Optional<User> findById(Long id) {
         return Optional.empty();
     }
@@ -41,6 +76,7 @@ public class UserDao implements Dao<Long, User> {
     public void update(User entity) {
 
     }
+
 
     @Override
     @SneakyThrows

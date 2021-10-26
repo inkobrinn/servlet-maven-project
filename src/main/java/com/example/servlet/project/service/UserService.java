@@ -2,13 +2,17 @@ package com.example.servlet.project.service;
 
 import com.example.servlet.project.dao.UserDao;
 import com.example.servlet.project.dto.CreateUserDto;
+import com.example.servlet.project.dto.UserDto;
 import com.example.servlet.project.entity.User;
 import com.example.servlet.project.exception.ValidationException;
 import com.example.servlet.project.mapper.CreateUserMapper;
+import com.example.servlet.project.mapper.UserMapper;
 import com.example.servlet.project.validator.CreateUserValidator;
 import com.example.servlet.project.validator.ValidationResult;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+
+import java.util.Optional;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -19,6 +23,11 @@ public class UserService {
     private final UserDao userDao = UserDao.getInstance();
     private final CreateUserMapper createUserMapper = CreateUserMapper.getInstance();
     private final ImageService imageService = ImageService.getInstance();
+    private final UserMapper userMapper = UserMapper.getInstance();
+
+    public Optional<UserDto> login(String email, String password) {
+        return userDao.findByEmailAndPassword(email, password).map(userMapper::mapFrom);
+    }
 
     @SneakyThrows
     public Long create(CreateUserDto userDto) {
