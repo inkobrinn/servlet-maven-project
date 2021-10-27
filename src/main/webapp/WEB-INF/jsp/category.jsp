@@ -5,6 +5,7 @@
     <title>Title</title>
 </head>
 <body>
+<%@include file="header.jsp"%>
 <h2>Categories</h2>
 <ul>
     <c:forEach var="category" items="${requestScope.categories}">
